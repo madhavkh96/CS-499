@@ -1,0 +1,6 @@
+Storylet Info,,,,Character Update,,Pre Conditions,,,Post Conditions,,
+0,1,2,3,4,5,6,7,8,9,10,11
+id,Storylet Display Name,Storylet Text,Level,Morality Level,Affected Character Qualities ,Actors,Pre-CharacterQualities,Pre_Posn,"Actors(+, -)",Position,Post-Level
+0,Introduction,You wake up sweating inside your room; you look around and feel scared,0,*,*,Player;,*,Kids Room,ADDPlayer;,Kids Room,1
+1,Go To Parents Room,You crawl out your bed to go to your parents room. You run to your parents room; the feeling of someone following you becoming greater as you rush towards your parents room. new-l new-lYou only feeling; calm once you reach your parents room.,1,*,Support:2,Player;,*,Kids Room,*,Parents Room,2
+2,Cover Yourself with Blanket,You cover yourself with your blanker; and take deep breaths to calm yourself. Eventually you drift off to sleep. new-l new-lYou are awoken again by the sound of distant commotion and a loud boom sound. Curious to see; you crawl out of your bed and grab your flashlight.,1,*,Adventurous:2,Player;,*,Kids Room,*,Kids Room,2
