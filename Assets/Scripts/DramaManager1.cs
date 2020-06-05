@@ -40,7 +40,7 @@ public class DramaManager1 : MonoBehaviour
         foreach (KeyValuePair<string, Storylet1> pair in storylets) {
             if (ProcessStorylet(pair.Value)) {
                 GameObject tile = Instantiate(GameManager.instance.choicePrefab);
-                tile.transform.parent = choiceObjectParent.transform;
+                tile.transform.SetParent(choiceObjectParent.transform);
                 tile.GetComponentInChildren<TextMeshProUGUI>().text = pair.Value.TileDisplayText;
                 tile.GetComponent<Button>().onClick.AddListener(() => UpdateStoryScreen(pair.Value));
             }
@@ -253,8 +253,6 @@ public class DramaManager1 : MonoBehaviour
             if ((row[13].Contains(";") || row[13].Contains(":")) && !row[13].Contains("*")) {
                 string[] obj = row[13].Split(new char[] { ';' });
                         postConditions.interactableObj = obj[0];
-                Debug.Log("Wooo:" + obj[0]);
-
             }
 
             storylet.Precondition = preConditions;
