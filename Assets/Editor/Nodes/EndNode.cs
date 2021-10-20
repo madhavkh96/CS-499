@@ -43,4 +43,9 @@ public class EndNode : BaseNode
         RefreshExpandedState();
         RefreshPorts();
     }
+
+    public override void DefaultFieldValues()
+    {
+        enumField.SetValueWithoutNotify(endNodeType);
+    }
 }

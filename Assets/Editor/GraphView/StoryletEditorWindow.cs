@@ -15,12 +15,15 @@ public class StoryletEditorWindow : EditorWindow
 
 
     private StoryBeat beatType = StoryBeat.Main;
+    private LanguageType language = LanguageType.English;
 
-    private ToolbarMenu toolbarMenu;
+    private ToolbarMenu storyBeatMenu;
+    private ToolbarMenu languageMenu;
     private Label storyletName;
 
 
     public StoryBeat BeatType { get => beatType; set => beatType = value; }
+    public LanguageType Language { get => language; set => language = value; }
 
     [OnOpenAsset(1)]
     public static bool ShowWindow(int _instanceId, int line) {
@@ -87,21 +90,31 @@ public class StoryletEditorWindow : EditorWindow
         };
         toolbar.Add(loadBtn);
 
-        //Dropdown menu for Characterbeat
-        toolbarMenu = new ToolbarMenu();
+        //Dropdown menu for StoryBeat Select
+        storyBeatMenu = new ToolbarMenu();
         foreach (StoryBeat beat in (StoryBeat[])Enum.GetValues(typeof(StoryBeat))) 
         {
-            toolbarMenu.menu.AppendAction(beat.ToString(), new Action<DropdownMenuAction>(x => BeatSelect(beat, toolbarMenu)));
+            storyBeatMenu.menu.AppendAction(beat.ToString(), new Action<DropdownMenuAction>(x => BeatSelect(beat, storyBeatMenu)));
         }
 
-        toolbar.Add(toolbarMenu);
+        toolbar.Add(storyBeatMenu);
+
+        //Dropdown menu for LanguageSelect
+        languageMenu = new ToolbarMenu();
+        foreach (LanguageType language in (LanguageType[])Enum.GetValues(typeof(LanguageType))) 
+        {
+            languageMenu.menu.AppendAction(language.ToString(), new Action<DropdownMenuAction>(x => LanguageSelect(language, languageMenu)));
+        }
+
+        toolbar.Add(languageMenu);
 
         //Name of current Storylet we Have open.
         storyletName = new Label("");
         toolbar.Add(storyletName);
 
         //Adding to the stylesheet
-        toolbarMenu.AddToClassList("beatList");
+        storyBeatMenu.AddToClassList("List");
+        languageMenu.AddToClassList("List");
         storyletName.AddToClassList("storyletName");
         loadBtn.AddToClassList("loadBtn");
         toolbar.AddToClassList("toolbar");
@@ -111,17 +124,23 @@ public class StoryletEditorWindow : EditorWindow
         rootVisualElement.Add(toolbar);
     }
 
-    private void BeatSelect(StoryBeat beat, ToolbarMenu toolbarMenu) {
-        toolbarMenu.text = "Current Story Beat: " + beat.ToString();
+    private void BeatSelect(StoryBeat _beat, ToolbarMenu _toolbarMenu) {
+        _toolbarMenu.text = "Current Story Beat: " + _beat.ToString();
     }
 
+    private void LanguageSelect(LanguageType _language, ToolbarMenu _toolbarMenu) {
+        _toolbarMenu.text = "Language: " + _language.ToString();
+        language = _language;
+        graphView.LanguageReload();
+    }
 
     private void Load() { 
         Debug.Log("Load");
 
         if (storyletName != null)
         {
-            BeatSelect(StoryBeat.Main, toolbarMenu);
+            BeatSelect(StoryBeat.Main, storyBeatMenu);
+            LanguageSelect(LanguageType.English, languageMenu);
             storyletName.text = "Storylet Name: " + currentStorylet.name;
         }
     }

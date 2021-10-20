@@ -43,4 +43,9 @@ public class EventNode : BaseNode
         RefreshExpandedState();
         RefreshPorts();
     }
+
+    public override void DefaultFieldValues()
+    {
+        objectField.SetValueWithoutNotify(dialogueEvent);
+    }
 }

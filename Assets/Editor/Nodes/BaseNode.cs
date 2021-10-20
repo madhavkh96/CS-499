@@ -21,18 +21,22 @@ public class BaseNode : Node
 
     public void AddOutputPort(string name, Port.Capacity capacity = Port.Capacity.Single) {
         Port outputPort = GetPortInstance(Direction.Output, capacity);
-        outputPort.name = name;
+        outputPort.portName = name;
         outputContainer.Add(outputPort);
     }
 
     public void AddInputPort(string name, Port.Capacity capacity = Port.Capacity.Multi) {
-        Port inputPort = GetPortInstance(Direction.Output, capacity);
-        inputPort.name = name;
+        Port inputPort = GetPortInstance(Direction.Input, capacity);
+        inputPort.portName = name;
         outputContainer.Add(inputPort);
 
     }
 
     public Port GetPortInstance(Direction nodeDirection, Port.Capacity capacity = Port.Capacity.Single) {
         return InstantiatePort(Orientation.Horizontal, nodeDirection, capacity, typeof(float));
+    }
+
+    public virtual void DefaultFieldValues() { 
+        
     }
 }
