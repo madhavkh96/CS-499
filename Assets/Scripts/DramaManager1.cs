@@ -25,10 +25,16 @@ public class DramaManager1 : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Main Fn:
+    /// Is Called on clicking a choice.
+    /// </summary>
+    /// <param name="storylet"></param>
     public void UpdateStoryScreen(Storylet1 storylet) {
 
         GameObject choiceObjectParent = GameObject.Find("Choices");
 
+        //Destroys existing Choices
         for (int i = 0; i < choiceObjectParent.transform.childCount; i++)
         {
             Transform child = choiceObjectParent.transform.GetChild(i);
@@ -48,6 +54,11 @@ public class DramaManager1 : MonoBehaviour
     }
 
 
+
+    /// <summary>
+    /// Updates the Current Scene with the provided storylet.
+    /// </summary>
+    /// <param name="storylet"></param>
     void UpdateScene(Storylet1 storylet) {
         storylets.Remove(storylet.TileDisplayText);
         scene.currentStorylet = storylet;
@@ -76,16 +87,22 @@ public class DramaManager1 : MonoBehaviour
 
     }
 
-
+    /// <summary>
+    /// Replaces the Scene Text with the Objects and the Actor Names
+    /// </summary>
+    /// <param name="storylet"></param>
     void UpdateSceneText(Storylet1 storylet) {
         storylet.StoryletText = storylet.StoryletText.Replace("_DEAD_", scene.deadActors[0]);
         storylet.StoryletText = storylet.StoryletText.Replace("#OBJ", scene.interactionObject);
         storylet.TileDisplayText = storylet.TileDisplayText.Replace("_DEAD_", scene.deadActors[0]);
         storylet.TileDisplayText = storylet.TileDisplayText.Replace("#OBJ", scene.interactionObject);
-
-
     }
 
+    /// <summary>
+    /// Checking what all storylets are valid for the current storylevel.
+    /// </summary>
+    /// <param name="storylet"></param>
+    /// <returns></returns>
     bool ProcessStorylet(Storylet1 storylet) {
         bool returnValue = false;
         string current_posn = scene.current_position;
@@ -111,7 +128,12 @@ public class DramaManager1 : MonoBehaviour
         return returnValue;
     }
 
-
+    /// <summary>
+    /// Helper Function: Compares two Lists
+    /// </summary>
+    /// <param name="sceneList"></param>
+    /// <param name="storyletList"></param>
+    /// <returns></returns>
     bool compareList(List<string> sceneList, List<string> storyletList) {
         int count = sceneList.Count;
         if (count < storyletList.Count) { return false; }
@@ -138,6 +160,11 @@ public class DramaManager1 : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// Updates the character list that are currently present in the scene
+    /// </summary>
+    /// <param name="str"></param>
     void Updatecharachter(string str)
     {
         if (str.Contains("SUB"))
@@ -151,6 +178,9 @@ public class DramaManager1 : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Loads Assests from the Excel file.
+    /// </summary>
     public void AssetLoad()
     {
         var file = Resources.Load<TextAsset>(inputFile);

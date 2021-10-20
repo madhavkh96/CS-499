@@ -69,7 +69,9 @@ public class GameManager : MonoBehaviour
 
 
 
-
+    /// <summary>
+    /// Initial Story Setup
+    /// </summary>
     void SetupStory() {
         Storylet1 introduction;
 
@@ -81,8 +83,9 @@ public class GameManager : MonoBehaviour
 
         DramaManager1.instance.initialStartUp = true;
         DramaManager1.instance.UpdateStoryScreen(introduction);
-
     }
+
+
     void DebugDictionary() {
         foreach (KeyValuePair<string, Storylet1> key in DramaManager1.instance.storylets)
         {
