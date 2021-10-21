@@ -113,6 +113,7 @@ public class DialogueNode : BaseNode
 
 
     public void ChangeName(string _name) {
+        name = _name;
         name_Field.SetValueWithoutNotify(_name);
     }
 

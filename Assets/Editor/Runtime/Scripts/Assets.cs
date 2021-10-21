@@ -143,6 +143,8 @@ public class Assets
         int _level = 0;
         Vector2 _position = new Vector2(702, 388);
 
+        List<DialogueNode> nodes = new List<DialogueNode>();
+
         int[] nodesAtEachLevel = new int[50];
 
         foreach (KeyValuePair<string, Storylet1> storylet in _asset.storylets)
@@ -150,11 +152,12 @@ public class Assets
             nodesAtEachLevel[storylet.Value.Precondition.level]++;
         }
 
+        // Super Unoptimized O(n^3) Time Complexity [Make better System Design]              
+        // Try making references to children nodes in the story for O(n)                  ]-----------> Fix THIS SHIIEEET
 
 
-        //Super Unoptimized O(n^2) Time Complexity [Make better System Design]              
-        //Try making references to children nodes in the story for O(n)                  ]----------- Fix THIS SHIIEEET
-
+        //TODO: ADD A PRECONDITION CHECK
+        
         for (int i = 0; i < _asset.storylets.Count; i++)
         {
             int j = -1;
@@ -178,29 +181,43 @@ public class Assets
 
                     node.RefreshExpandedState();
                     node.RefreshPorts();
-
                     foreach (KeyValuePair<string, Storylet1> childStorylet in _asset.storylets)
                     {
-                        Debug.Log("Here");
                         if (childStorylet.Value.Precondition.level == _level + 1)
                         {
-                            Debug.Log($"Adding Choices, {childStorylet.Key}");
-                            Port port = node.AddChoicePort(node);
+                            Port port = node.AddChoicePort(node); 
 
                             //Removes Content Container
                             port.contentContainer.RemoveAt(2);
-
                             port.portName = childStorylet.Value.TileDisplayText;
                             node.RefreshPorts();
                             node.RefreshExpandedState();
                         }
                     }
-
+                    nodes.Add(node);
                     nodesAtEachLevel[_level]--;
                 }
             }
 
             _level++;
+        }
+
+        // Connecting the nodes
+        foreach (DialogueNode dialogueNode in nodes) {
+            for (int i = 1; i < dialogueNode.outputContainer.childCount; i++) {
+                Port _output = dialogueNode.outputContainer[i] as Port;
+                Debug.Log($"{_output.portName}, {dialogueNode.Name}");
+                DialogueNode _inputNode = nodes.Find(node => node.Name == _output.portName);
+                Debug.LogError($"{_inputNode.outputContainer.childCount}, {_output.portName}");
+                Port _input = _inputNode.outputContainer[0] as Port;
+                Edge e = new Edge()
+                {
+                    input = _input,
+                    output = _output,
+                    visible = true
+                };
+                _graphView.AddElement(e);
+            }
         }
     }
 }
