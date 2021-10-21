@@ -6,49 +6,26 @@ using UnityEngine;
 using UnityEngine.UI;
 public class DramaManager1 : MonoBehaviour
 {
-    public string inputFile;
+
     public static DramaManager1 instance;
+    public  string inputFile;
     // Start is called before the first frame update
-    public StoryScene scene = new StoryScene();
-    public CharachterManager character = new CharachterManager();
-    public Dictionary<string, Storylet1> storylets = new Dictionary<string, Storylet1>();
-    public bool initialStartUp;
+    public  StoryScene scene = new StoryScene();
+    public  CharachterManager character = new CharachterManager();
+    public  Dictionary<string, Storylet1> storylets = new Dictionary<string, Storylet1>();
+    public  bool initialStartUp;
 
-    void Awake()
+
+    public void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else {
-            Destroy(this);
-        }
+        instance = this;
     }
 
-    public void UpdateStoryScreen(Storylet1 storylet) {
-
-        GameObject choiceObjectParent = GameObject.Find("Choices");
-
-        for (int i = 0; i < choiceObjectParent.transform.childCount; i++)
-        {
-            Transform child = choiceObjectParent.transform.GetChild(i);
-            Destroy(child.gameObject);
-        }
-
-        UpdateScene(storylet);
-
-        foreach (KeyValuePair<string, Storylet1> pair in storylets) {
-            if (ProcessStorylet(pair.Value)) {
-                GameObject tile = Instantiate(GameManager.instance.choicePrefab);
-                tile.transform.SetParent(choiceObjectParent.transform);
-                tile.GetComponentInChildren<TextMeshProUGUI>().text = pair.Value.TileDisplayText;
-                tile.GetComponent<Button>().onClick.AddListener(() => UpdateStoryScreen(pair.Value));
-            }
-        }
-    }
-
-
-    void UpdateScene(Storylet1 storylet) {
+    /// <summary>
+    /// Updates the Current Scene with the provided storylet.
+    /// </summary>
+    /// <param name="storylet"></param>
+    public  void UpdateScene(Storylet1 storylet) {
         storylets.Remove(storylet.TileDisplayText);
         scene.currentStorylet = storylet;
         foreach (string actor in storylet.Postcondition.actors) {
@@ -76,17 +53,23 @@ public class DramaManager1 : MonoBehaviour
 
     }
 
-
-    void UpdateSceneText(Storylet1 storylet) {
+    /// <summary>
+    /// Replaces the Scene Text with the Objects and the Actor Names
+    /// </summary>
+    /// <param name="storylet"></param>
+     void UpdateSceneText(Storylet1 storylet) {
         storylet.StoryletText = storylet.StoryletText.Replace("_DEAD_", scene.deadActors[0]);
         storylet.StoryletText = storylet.StoryletText.Replace("#OBJ", scene.interactionObject);
         storylet.TileDisplayText = storylet.TileDisplayText.Replace("_DEAD_", scene.deadActors[0]);
         storylet.TileDisplayText = storylet.TileDisplayText.Replace("#OBJ", scene.interactionObject);
-
-
     }
 
-    bool ProcessStorylet(Storylet1 storylet) {
+    /// <summary>
+    /// Checking what all storylets are valid for the current storylevel.
+    /// </summary>
+    /// <param name="storylet"></param>
+    /// <returns></returns>
+    public  bool ProcessStorylet(Storylet1 storylet) {
         bool returnValue = false;
         string current_posn = scene.current_position;
         string required_posn = storylet.Precondition.position;
@@ -111,8 +94,13 @@ public class DramaManager1 : MonoBehaviour
         return returnValue;
     }
 
-
-    bool compareList(List<string> sceneList, List<string> storyletList) {
+    /// <summary>
+    /// Helper Function: Compares two Lists
+    /// </summary>
+    /// <param name="sceneList"></param>
+    /// <param name="storyletList"></param>
+    /// <returns></returns>
+     bool compareList(List<string> sceneList, List<string> storyletList) {
         int count = sceneList.Count;
         if (count < storyletList.Count) { return false; }
 
@@ -132,13 +120,18 @@ public class DramaManager1 : MonoBehaviour
         return returnValue;
     }
 
-    void PrintList(List<string> list, string indicator) {
+     void PrintList(List<string> list, string indicator) {
         foreach (string item in list) {
             Debug.Log("<color=red>"+indicator+ " - "+item+"</color>");  
         }
     }
 
-    void Updatecharachter(string str)
+
+    /// <summary>
+    /// Updates the character list that are currently present in the scene
+    /// </summary>
+    /// <param name="str"></param>
+     void Updatecharachter(string str)
     {
         if (str.Contains("SUB"))
         {
@@ -151,8 +144,16 @@ public class DramaManager1 : MonoBehaviour
         }
     }
 
-    public void AssetLoad()
+
+#region Asset Loading
+    // Ideally this should be in another script DO IT! ?_?
+
+    /// <summary>
+    /// Loads Assests from the Excel file.
+    /// </summary>
+    public  void AssetLoad()
     {
+        
         var file = Resources.Load<TextAsset>(inputFile);
 
         string[] data = file.text.Split(new char[] { '\n' });
@@ -265,5 +266,7 @@ public class DramaManager1 : MonoBehaviour
         //    Debug.Log(storylet.Key);
         //}
     }
+
 }
 
+#endregion

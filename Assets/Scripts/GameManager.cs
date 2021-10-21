@@ -69,7 +69,9 @@ public class GameManager : MonoBehaviour
 
 
 
-
+    /// <summary>
+    /// Initial Story Setup
+    /// </summary>
     void SetupStory() {
         Storylet1 introduction;
 
@@ -80,9 +82,10 @@ public class GameManager : MonoBehaviour
         }
 
         DramaManager1.instance.initialStartUp = true;
-        DramaManager1.instance.UpdateStoryScreen(introduction);
-
+        UpdateStoryScreen(introduction);
     }
+
+
     void DebugDictionary() {
         foreach (KeyValuePair<string, Storylet1> key in DramaManager1.instance.storylets)
         {
@@ -91,4 +94,35 @@ public class GameManager : MonoBehaviour
 
     }
 
+
+    /// <summary>
+    /// Main Fn:
+    /// Is Called on clicking a choice.
+    /// </summary>
+    /// <param name="storylet"></param>
+    public void UpdateStoryScreen(Storylet1 storylet)
+    {
+
+        GameObject choiceObjectParent = GameObject.Find("Choices");
+
+        //Destroys existing Choices
+        for (int i = 0; i < choiceObjectParent.transform.childCount; i++)
+        {
+            Transform child = choiceObjectParent.transform.GetChild(i);
+            Destroy(child.gameObject);
+        }
+
+        DramaManager1.instance.UpdateScene(storylet);
+
+        foreach (KeyValuePair<string, Storylet1> pair in DramaManager1.instance.storylets)
+        {
+            if (DramaManager1.instance.ProcessStorylet(pair.Value))
+            {
+                GameObject tile = Instantiate(GameManager.instance.choicePrefab);
+                tile.transform.SetParent(choiceObjectParent.transform);
+                tile.GetComponentInChildren<TextMeshProUGUI>().text = pair.Value.TileDisplayText;
+                tile.GetComponent<Button>().onClick.AddListener(() => UpdateStoryScreen(pair.Value));
+            }
+        }
+    }
 }
