@@ -34,3 +34,8 @@ public class DialogueNodePort {
     public List<LanguageGeneric<string>> TextLanguages = new List<LanguageGeneric<string>>();
 }
 
+[System.Serializable]
+public class StoryletAsset {
+    public string actorName;
+    public Dictionary<string, Storylet1> storylets = new Dictionary<string, Storylet1>();
+}

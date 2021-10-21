@@ -19,15 +19,8 @@
     min-height: 17px;
 }
 
-.loadBtn {
-    width: 40px;
-    min-height: 17px;
-    margin: 3px 5px;
-    padding: 3px;
-}
-
-.saveBtn {
-    width: 40px;
+.Btn {
+    min-width: 40px;
     min-height: 17px;
     margin: 3px 5px;
     padding: 3px;

@@ -58,6 +58,7 @@ public class NodeSearchWindow : ScriptableObject, ISearchWindowProvider
         {
             case StartNode node:
                 //Make Start Node
+                Debug.Log(_pos);
                 graphView.AddElement(graphView.CreateStartNode(_pos));
                 return true;
             case DialogueNode node:

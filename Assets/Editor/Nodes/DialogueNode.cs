@@ -112,6 +112,16 @@ public class DialogueNode : BaseNode
     }
 
 
+    public void ChangeName(string _name) {
+        name_Field.SetValueWithoutNotify(_name);
+    }
+
+    public void ChangeText(LanguageGeneric<string> _text)
+    {
+        texts.Find(text => text.language == _text.language).LanguageGenericType = _text.LanguageGenericType;
+        texts_Field.SetValueWithoutNotify(texts.Find(text => text.language == _text.language).LanguageGenericType);
+    }
+
     public void ReloadLanguage() {
         texts_Field.RegisterValueChangedCallback(value => {
             texts.Find(text => text.language == editorWindow.Language).LanguageGenericType = value.newValue;

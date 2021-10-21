@@ -61,8 +61,8 @@ public class GameManager : MonoBehaviour
 
     void CharacterConfirmation() {
         PlayerPrefs.SetString("player_name", GameObject.Find("NameInput").GetComponent<TMP_InputField>().text);
-        DramaManager1.scene.player_name = GameObject.Find("NameInput").GetComponent<TMP_InputField>().text;
-        DramaManager1.AssetLoad();
+        DramaManager1.instance.scene.player_name = GameObject.Find("NameInput").GetComponent<TMP_InputField>().text;
+        DramaManager1.instance.AssetLoad();
         initialStartScreen.SetActive(false);
         SetupStory();
     }
@@ -75,19 +75,19 @@ public class GameManager : MonoBehaviour
     void SetupStory() {
         Storylet1 introduction;
 
-        if (!DramaManager1.storylets.TryGetValue("Introduction", out introduction))
+        if (!DramaManager1.instance.storylets.TryGetValue("Introduction", out introduction))
         {
             Debug.LogError("No start point for the story found!");
             return;
         }
 
-        DramaManager1.initialStartUp = true;
+        DramaManager1.instance.initialStartUp = true;
         UpdateStoryScreen(introduction);
     }
 
 
     void DebugDictionary() {
-        foreach (KeyValuePair<string, Storylet1> key in DramaManager1.storylets)
+        foreach (KeyValuePair<string, Storylet1> key in DramaManager1.instance.storylets)
         {
             Debug.Log(key.Key);
         }
@@ -112,11 +112,11 @@ public class GameManager : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        DramaManager1.UpdateScene(storylet);
+        DramaManager1.instance.UpdateScene(storylet);
 
-        foreach (KeyValuePair<string, Storylet1> pair in DramaManager1.storylets)
+        foreach (KeyValuePair<string, Storylet1> pair in DramaManager1.instance.storylets)
         {
-            if (DramaManager1.ProcessStorylet(pair.Value))
+            if (DramaManager1.instance.ProcessStorylet(pair.Value))
             {
                 GameObject tile = Instantiate(GameManager.instance.choicePrefab);
                 tile.transform.SetParent(choiceObjectParent.transform);

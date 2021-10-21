@@ -6,6 +6,8 @@ using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
+using System.IO;
+using UnityEditor.SceneManagement;
 
 public class StoryletEditorWindow : EditorWindow
 {
@@ -17,13 +19,15 @@ public class StoryletEditorWindow : EditorWindow
     private StoryBeat beatType = StoryBeat.Main;
     private LanguageType language = LanguageType.English;
 
+
     private ToolbarMenu storyBeatMenu;
     private ToolbarMenu languageMenu;
     private Label storyletName;
 
-
+    private StoryletAsset asset;
     public StoryBeat BeatType { get => beatType; set => beatType = value; }
     public LanguageType Language { get => language; set => language = value; }
+    public StoryletAsset Asset { get => asset; set => asset = value; }
 
     [OnOpenAsset(1)]
     public static bool ShowWindow(int _instanceId, int line) {
@@ -67,27 +71,19 @@ public class StoryletEditorWindow : EditorWindow
 
 
         //Save buitton
-        Button saveBtn = new Button()
+        Button saveBtn = new Button(() => Save())
         {
             text = "Save"
         };
-        
-        saveBtn.clickable.clicked += () =>
-        {
-            Save();
-        };
+
         toolbar.Add(saveBtn);
 
         //Load buitton
-        Button loadBtn = new Button()
+        Button loadBtn = new Button(() => Load())
         {
             text = "Load"
         };
 
-        loadBtn.clickable.clicked += () =>
-        {
-            Save();
-        };
         toolbar.Add(loadBtn);
 
         //Dropdown menu for StoryBeat Select
@@ -112,16 +108,25 @@ public class StoryletEditorWindow : EditorWindow
         storyletName = new Label("");
         toolbar.Add(storyletName);
 
+        Button importBtn = new Button(() => ImportFile())
+        {
+            text = "Import File"
+        };
+        toolbar.Add(importBtn);
+        
+
         //Adding to the stylesheet
         storyBeatMenu.AddToClassList("List");
         languageMenu.AddToClassList("List");
         storyletName.AddToClassList("storyletName");
-        loadBtn.AddToClassList("loadBtn");
+        loadBtn.AddToClassList("Btn");
         toolbar.AddToClassList("toolbar");
-        saveBtn.AddToClassList("saveBtn");
+        saveBtn.AddToClassList("Btn");
+        importBtn.AddToClassList("Btn");
 
 
         rootVisualElement.Add(toolbar);
+
     }
 
     private void BeatSelect(StoryBeat _beat, ToolbarMenu _toolbarMenu) {
@@ -132,6 +137,16 @@ public class StoryletEditorWindow : EditorWindow
         _toolbarMenu.text = "Language: " + _language.ToString();
         language = _language;
         graphView.LanguageReload();
+    }
+
+    private void ImportFile() {
+        string path = EditorUtility.OpenFilePanel("Load Storylet File", Application.dataPath, "csv");
+    
+        if (!String.IsNullOrEmpty(path))
+        {
+            Asset = Assets.AssetLoad(path);
+            Assets.GenerateNodes(Asset, this, graphView);
+        }
     }
 
     private void Load() { 
