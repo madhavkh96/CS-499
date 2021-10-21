@@ -61,8 +61,8 @@ public class GameManager : MonoBehaviour
 
     void CharacterConfirmation() {
         PlayerPrefs.SetString("player_name", GameObject.Find("NameInput").GetComponent<TMP_InputField>().text);
-        DramaManager1.instance.scene.player_name = GameObject.Find("NameInput").GetComponent<TMP_InputField>().text;
-        DramaManager1.instance.AssetLoad();
+        DramaManager1.scene.player_name = GameObject.Find("NameInput").GetComponent<TMP_InputField>().text;
+        DramaManager1.AssetLoad();
         initialStartScreen.SetActive(false);
         SetupStory();
     }
@@ -75,23 +75,54 @@ public class GameManager : MonoBehaviour
     void SetupStory() {
         Storylet1 introduction;
 
-        if (!DramaManager1.instance.storylets.TryGetValue("Introduction", out introduction))
+        if (!DramaManager1.storylets.TryGetValue("Introduction", out introduction))
         {
             Debug.LogError("No start point for the story found!");
             return;
         }
 
-        DramaManager1.instance.initialStartUp = true;
-        DramaManager1.instance.UpdateStoryScreen(introduction);
+        DramaManager1.initialStartUp = true;
+        UpdateStoryScreen(introduction);
     }
 
 
     void DebugDictionary() {
-        foreach (KeyValuePair<string, Storylet1> key in DramaManager1.instance.storylets)
+        foreach (KeyValuePair<string, Storylet1> key in DramaManager1.storylets)
         {
             Debug.Log(key.Key);
         }
 
     }
 
+
+    /// <summary>
+    /// Main Fn:
+    /// Is Called on clicking a choice.
+    /// </summary>
+    /// <param name="storylet"></param>
+    public void UpdateStoryScreen(Storylet1 storylet)
+    {
+
+        GameObject choiceObjectParent = GameObject.Find("Choices");
+
+        //Destroys existing Choices
+        for (int i = 0; i < choiceObjectParent.transform.childCount; i++)
+        {
+            Transform child = choiceObjectParent.transform.GetChild(i);
+            Destroy(child.gameObject);
+        }
+
+        DramaManager1.UpdateScene(storylet);
+
+        foreach (KeyValuePair<string, Storylet1> pair in DramaManager1.storylets)
+        {
+            if (DramaManager1.ProcessStorylet(pair.Value))
+            {
+                GameObject tile = Instantiate(GameManager.instance.choicePrefab);
+                tile.transform.SetParent(choiceObjectParent.transform);
+                tile.GetComponentInChildren<TextMeshProUGUI>().text = pair.Value.TileDisplayText;
+                tile.GetComponent<Button>().onClick.AddListener(() => UpdateStoryScreen(pair.Value));
+            }
+        }
+    }
 }

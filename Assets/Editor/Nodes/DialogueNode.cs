@@ -9,7 +9,7 @@ using UnityEngine.UIElements;
 
 public class DialogueNode : BaseNode
 {
-    private string name = " ";
+    private string name = "";
     private Sprite faceImage;
 
     public string Name { get => name; set => name = value; }
@@ -46,7 +46,7 @@ public class DialogueNode : BaseNode
                 language = language,
                 LanguageGenericType = "",
             });
-
+            //ADD Audio Clips Default
               
         }
 
@@ -99,19 +99,16 @@ public class DialogueNode : BaseNode
         mainContainer.Add(texts_Field);
 
 
-        Button button = new Button()
+        Button button = new Button(() => AddChoicePort(this))
         {
             text = "Add Choice"
         };
-        button.clickable.clicked += () =>
-        {
-            //TODO: Add a new Choice Output Port.
-            AddChoicePort(this);
-        };
-
 
         titleButtonContainer.Add(button);
 
+        //Refreshes the State
+        RefreshExpandedState();
+        RefreshPorts();
     }
 
 
@@ -122,8 +119,8 @@ public class DialogueNode : BaseNode
         texts_Field.SetValueWithoutNotify(texts.Find(text => text.language == editorWindow.Language).LanguageGenericType);
 
         //Add the audio functionality here As well if we change that
-        
-        //
+   
+
         foreach (DialogueNodePort dialogueNodePort in dialogueNodePorts) {
             dialogueNodePort.TextField.RegisterValueChangedCallback(value =>
             {
@@ -145,12 +142,12 @@ public class DialogueNode : BaseNode
     /// Adds an Output Choice Port from a Dialogue Node
     /// </summary>
     /// <param name="_baseNode"></param>
-    /// <param name="_dialogeNodePort"></param>
+    /// <param name="_dialogueNodePort"></param>
     /// <returns></returns>
-    public Port AddChoicePort(BaseNode _baseNode, DialogueNodePort _dialogeNodePort = null) {
+    public Port AddChoicePort(BaseNode _baseNode, DialogueNodePort _dialogueNodePort = null) {
         Port port = GetPortInstance(Direction.Output);
         int outputPortCount = _baseNode.outputContainer.Query("connector").ToList().Count();
-        string outputPortName = $"Choice {outputPortCount + 1}";
+        string outputPortName = $"Choice {outputPortCount}";
 
         DialogueNodePort dialogueNodePort = new DialogueNodePort();
         foreach (LanguageType language in (LanguageType[])Enum.GetValues(typeof(LanguageType)))
@@ -162,11 +159,11 @@ public class DialogueNode : BaseNode
             }); 
         }
 
-        if (_dialogeNodePort != null) {
-            dialogueNodePort.InputGuid = _dialogeNodePort.InputGuid;
-            dialogueNodePort.OutputGuid = _dialogeNodePort.OutputGuid;
+        if (_dialogueNodePort != null) {
+            dialogueNodePort.InputGuid = _dialogueNodePort.InputGuid;
+            dialogueNodePort.OutputGuid = _dialogueNodePort.OutputGuid;
 
-            foreach (LanguageGeneric<string> item in _dialogeNodePort.TextLanguages) 
+            foreach (LanguageGeneric<string> item in _dialogueNodePort.TextLanguages) 
             {
                 dialogueNodePort.TextLanguages.Find(language => language.language == item.language).LanguageGenericType = item.LanguageGenericType;
             }

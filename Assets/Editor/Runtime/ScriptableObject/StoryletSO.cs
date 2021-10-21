@@ -33,3 +33,4 @@ public class DialogueNodePort {
     public TextField TextField;
     public List<LanguageGeneric<string>> TextLanguages = new List<LanguageGeneric<string>>();
 }
+
