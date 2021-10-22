@@ -116,7 +116,7 @@ public class GameManager : MonoBehaviour
 
         foreach (KeyValuePair<string, Storylet1> pair in DramaManager1.instance.storylets)
         {
-            if (DramaManager1.instance.ProcessStorylet(pair.Value))
+            if (DramaManager1.ProcessStorylet(pair.Value, DramaManager1.instance.scene, DramaManager1.instance.character))
             {
                 GameObject tile = Instantiate(GameManager.instance.choicePrefab);
                 tile.transform.SetParent(choiceObjectParent.transform);

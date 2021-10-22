@@ -206,9 +206,7 @@ public class Assets
         foreach (DialogueNode dialogueNode in nodes) {
             for (int i = 1; i < dialogueNode.outputContainer.childCount; i++) {
                 Port _output = dialogueNode.outputContainer[i] as Port;
-                Debug.Log($"{_output.portName}, {dialogueNode.Name}");
                 DialogueNode _inputNode = nodes.Find(node => node.Name == _output.portName);
-                Debug.LogError($"{_inputNode.outputContainer.childCount}, {_output.portName}");
                 Port _input = _inputNode.outputContainer[0] as Port;
                 Edge e = new Edge()
                 {

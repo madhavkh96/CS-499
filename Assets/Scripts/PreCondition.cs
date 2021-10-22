@@ -8,6 +8,11 @@ public class PreConditions {
     public int level;
     public Dictionary<string, int> storyletRequirements = new Dictionary<string, int>();
 
+    // Empathy : 5
+    // Perspective-Taking : 4
+    // 
+
+
     public PreConditions() {
         this.position = null;
         this.charachterMood = CharachterMood.None;

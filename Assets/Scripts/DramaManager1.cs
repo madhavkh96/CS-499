@@ -29,7 +29,7 @@ public class DramaManager1 : MonoBehaviour
         storylets.Remove(storylet.TileDisplayText);
         scene.currentStorylet = storylet;
         foreach (string actor in storylet.Postcondition.actors) {
-            Updatecharachter(actor);
+            Updatecharachter(actor, scene);
         }
         scene.current_position = storylet.Postcondition.position;
         scene.current_Level = storylet.Postcondition.level_post;
@@ -69,19 +69,19 @@ public class DramaManager1 : MonoBehaviour
     /// </summary>
     /// <param name="storylet"></param>
     /// <returns></returns>
-    public  bool ProcessStorylet(Storylet1 storylet) {
+    public static bool ProcessStorylet(Storylet1 storylet, StoryScene _scene, CharachterManager _character) {
         bool returnValue = false;
-        string current_posn = scene.current_position;
+        string current_posn = _scene.current_position;
         string required_posn = storylet.Precondition.position;
 
 
-        if (compareList(scene.actors, storylet.Precondition.actors) && current_posn.Equals(required_posn) && scene.current_Level == storylet.Precondition.level) {
+        if (compareList(_scene.actors, storylet.Precondition.actors) && current_posn.Equals(required_posn) && _scene.current_Level == storylet.Precondition.level) {
             if (storylet.Precondition.storyletRequirements.Count > 0) {
                 foreach (KeyValuePair<string, int> storyReq in storylet.Precondition.storyletRequirements)
                 {
-                    if (character.charachterQualities.ContainsKey(storyReq.Key))
+                    if (_character.charachterQualities.ContainsKey(storyReq.Key))
                     {
-                        if (character.charachterQualities[storyReq.Key] >= storyReq.Value) { returnValue = true; }
+                        if (_character.charachterQualities[storyReq.Key] >= storyReq.Value) { returnValue = true; }
                         else { returnValue = false; }
                     }
                     else { returnValue = false; }
@@ -100,7 +100,7 @@ public class DramaManager1 : MonoBehaviour
     /// <param name="sceneList"></param>
     /// <param name="storyletList"></param>
     /// <returns></returns>
-     bool compareList(List<string> sceneList, List<string> storyletList) {
+     static bool compareList(List<string> sceneList, List<string> storyletList) {
         int count = sceneList.Count;
         if (count < storyletList.Count) { return false; }
 
@@ -131,16 +131,16 @@ public class DramaManager1 : MonoBehaviour
     /// Updates the character list that are currently present in the scene
     /// </summary>
     /// <param name="str"></param>
-     void Updatecharachter(string str)
+     static void Updatecharachter(string str, StoryScene _scene)
     {
         if (str.Contains("SUB"))
         {
             string actorName = str.Substring(3);
-            if(scene.actors.Contains(actorName))
-                scene.actors.Remove(actorName);
+            if(_scene.actors.Contains(actorName))
+                _scene.actors.Remove(actorName);
         }
         else if (str.Contains("ADD")) {
-            scene.actors.Add(str.Substring(3));
+            _scene.actors.Add(str.Substring(3));
         }
     }
 
