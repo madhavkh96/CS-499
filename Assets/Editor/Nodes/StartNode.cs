@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class StartNode : BaseNode
 {
-    public StartNode() { 
-    
+    public StartNode() {
+        NodeType = NodeType.StartNode;
     }
 
     public StartNode(Vector2 _position, StoryletEditorWindow _editorWindow, StoryletGraphView _graphView) {
@@ -15,6 +15,8 @@ public class StartNode : BaseNode
         title = "Start";
         SetPosition(new Rect(_position, defaultNodeSize));
         NodeGUI_id = Guid.NewGuid().ToString();
+        NodeType = NodeType.StartNode;
+
 
         AddOutputPort("Output");
 

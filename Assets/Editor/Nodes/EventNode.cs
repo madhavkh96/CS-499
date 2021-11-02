@@ -14,6 +14,7 @@ public class EventNode : BaseNode
 
     public EventNode() { }
     public EventNode(Vector2 _position, StoryletEditorWindow _editorWindow, StoryletGraphView _graphView) {
+        NodeType = NodeType.EventNode;
         editorWindow = _editorWindow;
         graphView = _graphView;
         title = "Event";

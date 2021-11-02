@@ -10,10 +10,12 @@ public class BaseNode : Node
     protected StoryletGraphView graphView;
     protected StoryletEditorWindow editorWindow;
     protected Vector2 defaultNodeSize = new Vector2(200, 250);
-    
+
     protected string NodeGUI_id { get => nodeGUI_id; set => nodeGUI_id = value; }
+    public NodeType NodeType { get; set; }
 
     public BaseNode() {
+        NodeType = NodeType.None;
         StyleSheet styleSheet = Resources.Load<StyleSheet>("NodeStyleSheet");
         styleSheets.Add(styleSheet);
 

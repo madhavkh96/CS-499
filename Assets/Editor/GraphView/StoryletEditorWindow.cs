@@ -7,7 +7,9 @@ using UnityEditor.Callbacks;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 using System.IO;
-using UnityEditor.SceneManagement;
+using UnityEditor.Experimental.GraphView;
+using System.Globalization;
+using System.Text;
 
 public class StoryletEditorWindow : EditorWindow
 {
@@ -112,6 +114,7 @@ public class StoryletEditorWindow : EditorWindow
         {
             text = "Import File"
         };
+
         toolbar.Add(importBtn);
         
 
@@ -141,7 +144,7 @@ public class StoryletEditorWindow : EditorWindow
 
     private void ImportFile() {
         string path = EditorUtility.OpenFilePanel("Load Storylet File", Application.dataPath, "csv");
-    
+
         if (!String.IsNullOrEmpty(path))
         {
             Asset = Assets.AssetLoad(path);
@@ -162,5 +165,57 @@ public class StoryletEditorWindow : EditorWindow
 
     private void Save() {
         Debug.Log("Save");
+
+        var _nodes = graphView.GraphNodes;
+        Debug.Log(_nodes.Count);
+        PopulateData(_nodes);
+    }
+
+    private void PopulateData(List<BaseNode> _nodes)
+    {
+        string path = Application.dataPath + "/Editor/Resources/" + $"{this.beatType}" + ".csv";
+        
+        File.Create(path).Dispose();
+
+        var csv = new StringBuilder();
+
+
+        foreach (var n in _nodes) 
+        {
+            if (n.NodeType is NodeType.StartNode)
+            {
+                StartNode _node = (StartNode)n;
+                String str = String.Format("{0}, {1}", _node.name);
+            }
+            else if (n.NodeType is NodeType.EventNode)
+            {
+                //TODO
+            }
+            else if (n.NodeType is NodeType.DialogueNode)
+            {
+                DialogueNode _node = (DialogueNode)n;
+                string dialogue = _node.Texts.Find(text => text.language == this.Language).LanguageGenericType;
+                String str = String.Format("{0}, {1}", _node.Name, dialogue);
+                Debug.Log(str);
+                csv.AppendLine(str);
+            }
+            else if (n.NodeType is NodeType.EndNode) { 
+                //TODO
+            }
+        }
+
+        File.WriteAllText(path, csv.ToString());
+
+        //using (var writer = new StreamWriter(path))
+        //{
+        //    foreach (Node n in _nodes)
+        //    {
+        //        string str = String.Format("{0}, {1}", n.name, n.contentContainer);
+        //        writer.WriteLine(str);
+        //        writer.Flush();
+        //    }
+
+        //    writer.Close();
+        //}
     }
 }

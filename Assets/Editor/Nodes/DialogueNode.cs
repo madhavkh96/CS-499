@@ -27,12 +27,14 @@ public class DialogueNode : BaseNode
     public List<LanguageGeneric<string>> Texts { get => texts; set => texts = value; }
     public List<LanguageGeneric<AudioClip>> AudioClips { get => audioClips; set => audioClips = value; }
 
-    public DialogueNode() { }
+    public DialogueNode() { NodeType = NodeType.DialogueNode; }
 
     public DialogueNode(Vector2 _position, StoryletEditorWindow _editorWindow, StoryletGraphView _graphView) {
         editorWindow = _editorWindow;
         graphView = _graphView;
         title = "Dialogue";
+        NodeType = NodeType.DialogueNode;
+
 
         AddInputPort("Input");
         SetPosition(new Rect(_position, defaultNodeSize));

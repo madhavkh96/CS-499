@@ -21,6 +21,8 @@ public class EndNode : BaseNode
         title = "End";
         SetPosition(new Rect(_position, defaultNodeSize));
         NodeGUI_id = Guid.NewGuid().ToString();
+        NodeType = NodeType.EndNode;
+
 
         AddInputPort("Input");
 

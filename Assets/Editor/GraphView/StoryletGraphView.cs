@@ -10,7 +10,9 @@ public class StoryletGraphView : GraphView
     private string styleSheetName = "StoryletViewStyleSheet";
     private StoryletEditorWindow editorWindow;
     private NodeSearchWindow searchWindow;
+    private List<BaseNode> graphNodes = new List<BaseNode>();
 
+    public List<BaseNode> GraphNodes { get => graphNodes; set => graphNodes = value; }
 
     public StoryletGraphView(StoryletEditorWindow _editorWindow) {
         editorWindow = _editorWindow;
@@ -66,21 +68,25 @@ public class StoryletGraphView : GraphView
 
     public StartNode CreateStartNode(Vector2 _pos) {
         StartNode temp = new StartNode(_pos, editorWindow, this);
+        graphNodes.Add(temp);
         return temp;
     }
     public DialogueNode CreateDialogueNode(Vector2 _pos)
     {
         DialogueNode temp = new DialogueNode(_pos, editorWindow, this);
+        graphNodes.Add(temp);
         return temp;
     }
     public EventNode CreateEventNode(Vector2 _pos)
     {
         EventNode temp = new EventNode(_pos, editorWindow, this);
+        graphNodes.Add(temp);
         return temp;
     }
     public EndNode CreateEndNode(Vector2 _pos)
     {
         EndNode temp = new EndNode(_pos, editorWindow, this);
+        graphNodes.Add(temp);
         return temp;
     }
 }
