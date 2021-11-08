@@ -8,7 +8,7 @@ public class BaseNode : Node
 {
     private string nodeGUI_id;
     protected StoryletGraphView graphView;
-    protected StoryletEditorWindow editorWindow;
+    protected GraphEditorWindow editorWindow;
     protected Vector2 defaultNodeSize = new Vector2(200, 250);
 
     protected string NodeGUI_id { get => nodeGUI_id; set => nodeGUI_id = value; }

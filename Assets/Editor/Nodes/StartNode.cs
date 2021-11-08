@@ -9,7 +9,7 @@ public class StartNode : BaseNode
         NodeType = NodeType.StartNode;
     }
 
-    public StartNode(Vector2 _position, StoryletEditorWindow _editorWindow, StoryletGraphView _graphView) {
+    public StartNode(Vector2 _position, GraphEditorWindow _editorWindow, StoryletGraphView _graphView) {
         editorWindow = _editorWindow;
         graphView = _graphView;
         title = "Start";

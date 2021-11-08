@@ -11,10 +11,10 @@ using UnityEditor.Experimental.GraphView;
 using System.Globalization;
 using System.Text;
 
-public class StoryletEditorWindow : EditorWindow
+public class GraphEditorWindow : EditorWindow
 {
 
-    private StoryletSO currentStorylet;
+    private StoryletGraphSO currentStorylet;
     private StoryletGraphView graphView;
 
 
@@ -35,11 +35,11 @@ public class StoryletEditorWindow : EditorWindow
     public static bool ShowWindow(int _instanceId, int line) {
         UnityEngine.Object item = EditorUtility.InstanceIDToObject(_instanceId);
 
-        if (item is StoryletSO) 
+        if (item is StoryletGraphSO) 
         {
-            StoryletEditorWindow window = (StoryletEditorWindow)GetWindow(typeof(StoryletEditorWindow));
+            GraphEditorWindow window = (GraphEditorWindow)GetWindow(typeof(GraphEditorWindow));
             window.titleContent = new GUIContent("Storylet Editor");
-            window.currentStorylet = item as StoryletSO;
+            window.currentStorylet = item as StoryletGraphSO;
             window.minSize = new Vector2(500, 250);
             window.Load();
         }
@@ -168,54 +168,8 @@ public class StoryletEditorWindow : EditorWindow
 
         var _nodes = graphView.GraphNodes;
         Debug.Log(_nodes.Count);
-        PopulateData(_nodes);
-    }
-
-    private void PopulateData(List<BaseNode> _nodes)
-    {
         string path = Application.dataPath + "/Editor/Resources/" + $"{this.beatType}" + ".csv";
-        
-        File.Create(path).Dispose();
-
-        var csv = new StringBuilder();
-
-
-        foreach (var n in _nodes) 
-        {
-            if (n.NodeType is NodeType.StartNode)
-            {
-                StartNode _node = (StartNode)n;
-                String str = String.Format("{0}, {1}", _node.name);
-            }
-            else if (n.NodeType is NodeType.EventNode)
-            {
-                //TODO
-            }
-            else if (n.NodeType is NodeType.DialogueNode)
-            {
-                DialogueNode _node = (DialogueNode)n;
-                string dialogue = _node.Texts.Find(text => text.language == this.Language).LanguageGenericType;
-                String str = String.Format("{0}, {1}", _node.Name, dialogue);
-                Debug.Log(str);
-                csv.AppendLine(str);
-            }
-            else if (n.NodeType is NodeType.EndNode) { 
-                //TODO
-            }
-        }
-
-        File.WriteAllText(path, csv.ToString());
-
-        //using (var writer = new StreamWriter(path))
-        //{
-        //    foreach (Node n in _nodes)
-        //    {
-        //        string str = String.Format("{0}, {1}", n.name, n.contentContainer);
-        //        writer.WriteLine(str);
-        //        writer.Flush();
-        //    }
-
-        //    writer.Close();
-        //}
+        Assets.PopulateData(path,this, _nodes);
     }
+
 }

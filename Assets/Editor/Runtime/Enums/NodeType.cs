@@ -3,5 +3,6 @@
     StartNode,
     EventNode,
     DialogueNode,
+    PreConditionCheck,
     EndNode
 }

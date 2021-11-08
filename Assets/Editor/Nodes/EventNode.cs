@@ -13,7 +13,7 @@ public class EventNode : BaseNode
     public DialogueEventSO DialogueEvent { get => dialogueEvent; set => dialogueEvent = value; }
 
     public EventNode() { }
-    public EventNode(Vector2 _position, StoryletEditorWindow _editorWindow, StoryletGraphView _graphView) {
+    public EventNode(Vector2 _position, GraphEditorWindow _editorWindow, StoryletGraphView _graphView) {
         NodeType = NodeType.EventNode;
         editorWindow = _editorWindow;
         graphView = _graphView;

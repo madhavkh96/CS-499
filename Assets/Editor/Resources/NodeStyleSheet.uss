@@ -3,3 +3,13 @@ Label {
     -unity-font-style: bold;
     color: rgb(68, 138, 255);
 }
+
+.enumField {
+    width : 90px;
+    height: auto;
+}
+
+.enumValue {
+    width : 50px;
+    height: auto;
+}

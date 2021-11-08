@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -138,7 +140,7 @@ public class Assets
         return storyletAsset;
     }
 
-    public static void GenerateNodes(StoryletAsset _asset, StoryletEditorWindow _editorWindow, StoryletGraphView _graphView)
+    public static void GenerateNodes(StoryletAsset _asset, GraphEditorWindow _editorWindow, StoryletGraphView _graphView)
     {
         int _level = 0;
         Vector2 _position = new Vector2(702, 388);
@@ -217,5 +219,41 @@ public class Assets
                 _graphView.AddElement(e);
             }
         }
+    }
+
+    public static void PopulateData(string path, GraphEditorWindow _editorWindow, List<BaseNode> _nodes) {
+
+        File.Create(path).Dispose();
+
+        var csv = new StringBuilder();
+
+
+        foreach (var n in _nodes)
+        {
+            if (n.NodeType is NodeType.StartNode)
+            {
+                StartNode _node = (StartNode)n;
+                String str = String.Format("{0}, {1}", _node.name);
+            }
+            else if (n.NodeType is NodeType.EventNode)
+            {
+                //TODO
+            }
+            else if (n.NodeType is NodeType.DialogueNode)
+            {
+                DialogueNode _node = (DialogueNode)n;
+                string dialogue = _node.Texts.Find(text => text.language == _editorWindow.Language).LanguageGenericType;
+                String str = String.Format("{0}, {1}", _node.Name, dialogue);
+                Debug.Log(str);
+                csv.AppendLine(str);
+            }
+            else if (n.NodeType is NodeType.EndNode)
+            {
+                //TODO
+            }
+        }
+
+        File.WriteAllText(path, csv.ToString());
+        
     }
 }

@@ -29,7 +29,7 @@ public class DialogueNode : BaseNode
 
     public DialogueNode() { NodeType = NodeType.DialogueNode; }
 
-    public DialogueNode(Vector2 _position, StoryletEditorWindow _editorWindow, StoryletGraphView _graphView) {
+    public DialogueNode(Vector2 _position, GraphEditorWindow _editorWindow, StoryletGraphView _graphView) {
         editorWindow = _editorWindow;
         graphView = _graphView;
         title = "Dialogue";

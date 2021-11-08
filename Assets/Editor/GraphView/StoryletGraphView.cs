@@ -8,13 +8,13 @@ using UnityEngine.UIElements;
 public class StoryletGraphView : GraphView
 {
     private string styleSheetName = "StoryletViewStyleSheet";
-    private StoryletEditorWindow editorWindow;
+    private GraphEditorWindow editorWindow;
     private NodeSearchWindow searchWindow;
     private List<BaseNode> graphNodes = new List<BaseNode>();
 
     public List<BaseNode> GraphNodes { get => graphNodes; set => graphNodes = value; }
 
-    public StoryletGraphView(StoryletEditorWindow _editorWindow) {
+    public StoryletGraphView(GraphEditorWindow _editorWindow) {
         editorWindow = _editorWindow;
 
         StyleSheet tmpStyleSheet = Resources.Load<StyleSheet>(styleSheetName);
@@ -86,6 +86,12 @@ public class StoryletGraphView : GraphView
     public EndNode CreateEndNode(Vector2 _pos)
     {
         EndNode temp = new EndNode(_pos, editorWindow, this);
+        graphNodes.Add(temp);
+        return temp;
+    }
+
+    public PreConditionCheckNode CreateConditionCheck(Vector2 _pos) {
+        PreConditionCheckNode temp = new PreConditionCheckNode(_pos, editorWindow, this);
         graphNodes.Add(temp);
         return temp;
     }

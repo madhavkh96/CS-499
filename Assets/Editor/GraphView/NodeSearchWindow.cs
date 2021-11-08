@@ -7,10 +7,10 @@ using UnityEngine.UIElements;
 public class NodeSearchWindow : ScriptableObject, ISearchWindowProvider
 {
 
-    private StoryletEditorWindow editorWindow;
+    private GraphEditorWindow editorWindow;
     private StoryletGraphView graphView;
 
-    public void Configure(StoryletEditorWindow _editorWindow, StoryletGraphView _graphView) {
+    public void Configure(GraphEditorWindow _editorWindow, StoryletGraphView _graphView) {
         editorWindow = _editorWindow;
         graphView = _graphView;
     }
@@ -26,6 +26,11 @@ public class NodeSearchWindow : ScriptableObject, ISearchWindowProvider
             AddNodeSearch("Dialogue Node", new DialogueNode()),
             AddNodeSearch("Event Node", new EventNode()),
             AddNodeSearch("End Node", new EndNode()),
+
+            new SearchTreeGroupEntry(new GUIContent ("Pre Condition Node"), 1),
+
+            AddNodeSearch("Add Precondition Check", new PreConditionCheckNode()),
+
         };
 
         return tree;
@@ -72,6 +77,9 @@ public class NodeSearchWindow : ScriptableObject, ISearchWindowProvider
             case EndNode node:
                 //Make Start Node
                 graphView.AddElement(graphView.CreateEndNode(_pos));
+                return true;
+            case PreConditionCheckNode node:
+                graphView.AddElement(graphView.CreateConditionCheck(_pos));
                 return true;
             default:
                 break;

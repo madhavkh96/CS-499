@@ -14,7 +14,7 @@ public class EndNode : BaseNode
 
     public EndNode() { }
 
-    public EndNode(Vector2 _position, StoryletEditorWindow _editorWindow, StoryletGraphView _graphView) 
+    public EndNode(Vector2 _position, GraphEditorWindow _editorWindow, StoryletGraphView _graphView) 
     {
         editorWindow = _editorWindow;
         graphView = _graphView;
